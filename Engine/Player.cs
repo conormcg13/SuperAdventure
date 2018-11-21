@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 namespace Engine
 {
@@ -29,28 +31,12 @@ namespace Engine
                 return true;
             }
 
-            foreach (var inventoryItem in Inventory)
-            {
-                if (inventoryItem.Details.ID == theLocation.ItemRequiredToEnter.ID)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Inventory.Exists(ii => ii.Details.ID == theLocation.ItemRequiredToEnter.ID);
         }
 
         public bool HasThisQuest(Quest theQuest)
         {
-            foreach (var playerQuest in Quests)
-            {
-                if (playerQuest.Details.ID == theQuest.ID)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Quests.Exists(pq => pq.Details.ID == theQuest.ID);
         }
 
         public bool CompletedThisQuest(Quest theQuest)
@@ -68,69 +54,53 @@ namespace Engine
 
         public bool HasAllQuestCompletionItems(Quest theQuest)
         {
-            foreach (var theQuestQuestCompletionItem in theQuest.QuestCompletionItems)
+            var result = theQuest.QuestCompletionItems.Exists(ii =>
             {
-                bool foundItemInPlayersInventory = false;
-
-                foreach (var inventoryItem in Inventory)
-                {
-                    if (inventoryItem.Details.ID == theQuestQuestCompletionItem.Details.ID)
-                    {
-                        foundItemInPlayersInventory = true;
-                        if (inventoryItem.Quantity < theQuestQuestCompletionItem.Quantity)
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                if (!foundItemInPlayersInventory)
+                if (!Inventory.Exists(jj => jj.Details.ID == ii.Details.ID
+                                            && jj.Quantity >= ii.Quantity))
                 {
                     return false;
                 }
-            }
 
-            return true;
+                return true;
+            });
+            return result;
         }
 
         public void RemoveQuestCompletionItems(Quest quest)
         {
-            foreach (var questQuestCompletionItem in quest.QuestCompletionItems)
+            quest.QuestCompletionItems.ForEach(ii =>
             {
-                foreach (var inventoryItem in Inventory)
+                InventoryItem item = Inventory.SingleOrDefault(jj => jj.Details.ID == ii.Details.ID);
+                if (item != null)
                 {
-                    if (inventoryItem.Details.ID == questQuestCompletionItem.Details.ID)
-                    {
-                        inventoryItem.Quantity -= questQuestCompletionItem.Quantity;
-                        break;
-                    }
+                    item.Quantity -= ii.Quantity;
                 }
-            }
+            });
         }
 
         public void AddItemToInventory(Item itemToAdd)
         {
-            foreach (var inventoryItem in Inventory)
+            InventoryItem item = Inventory.FirstOrDefault(ii => ii.Details.ID == itemToAdd.ID);
+
+            if (item == null)
             {
-                if (inventoryItem.Details == itemToAdd)
-                {
-                    inventoryItem.Quantity++;
-                    return;
-                }
+                Inventory.Add(new InventoryItem(itemToAdd, 1));
+            }
+            else
+            {
+                item.Quantity++;
             }
 
-            Inventory.Add(new InventoryItem(itemToAdd, 1));
         }
 
         public void MarkQuestCompleted(Quest quest)
         {
-            foreach (var playerQuest in Quests)
+            
+            PlayerQuest playerQuest = Quests.FirstOrDefault(ii => ii.Details.ID == quest.ID);
+            if (playerQuest != null)
             {
-                if (playerQuest.Details.ID == quest.ID)
-                {
-                    playerQuest.IsCompleted = true;
-                    return;
-                }
+                playerQuest.IsCompleted = true;
             }
         }
     }
