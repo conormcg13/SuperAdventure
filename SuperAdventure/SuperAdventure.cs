@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Engine;
 using System.Windows.Forms;
@@ -8,17 +9,22 @@ namespace SuperAdventure
 {
     public partial class SuperAdventure : Form
     {
-        private Player _player;
+        private readonly Player _player;
         private Monster _currentMonster;
+        private const string PLAYER_DATA_FILE_NAME = "PlayerData.Xml";
 
         public SuperAdventure()
         {
             InitializeComponent();
-
-            _player = new Player();
-            MoveTo(World.LocationById((int)World.LocationTypes.Home));
-            _player.Inventory.Add(new InventoryItem(World.ItemById((int)World.ItemTypes.RustySword), 1));
-
+            if (File.Exists(PLAYER_DATA_FILE_NAME))
+            {
+                _player = Player.CreatePlayerFromXmlString(File.ReadAllText(PLAYER_DATA_FILE_NAME));
+            }
+            else
+            {
+                _player = Player.CreateDefaultPlayer();
+            }
+            MoveTo(_player.CurrentLocation);
             UpdatePlayerStats();
         }
 
@@ -421,6 +427,10 @@ namespace SuperAdventure
             rtbMessages.SelectionStart = rtbMessages.Text.Length;
             rtbMessages.ScrollToCaret();
         }
-        
+
+        private void SuperAdventure_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            File.WriteAllText(PLAYER_DATA_FILE_NAME, _player.ToXmlString());
+        }
     }
 }
