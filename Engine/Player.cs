@@ -8,10 +8,30 @@ namespace Engine
 {
     public class Player : LivingCreature
     {
-        public int Gold { get; set; }
-        public int ExperiencePoints { get; private set; }
+        private int _gold;
+        private int _experiencePoints; 
         public int Level => (ExperiencePoints / 100) + 1;
-        
+
+        public int Gold
+        {
+            get => _gold;
+            set
+            {
+                _gold = value;
+                OnPropertyChanged("Gold");
+            }
+        }
+
+        public int ExperiencePoints
+        {
+            get => _experiencePoints;
+            set
+            {
+                _experiencePoints = value;
+                OnPropertyChanged("ExperiencePoints");
+                OnPropertyChanged("Level");
+            }
+        }
         public List<InventoryItem> Inventory { get; set; }
         public List<PlayerQuest> Quests { get; set; }
         public Location CurrentLocation { get; set; }

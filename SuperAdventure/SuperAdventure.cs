@@ -24,8 +24,16 @@ namespace SuperAdventure
             {
                 _player = Player.CreateDefaultPlayer();
             }
+            lblHitPoints.DataBindings.Add(
+                "Text", _player, "CurrentHitPoints");
+            lblGold.DataBindings.Add(
+                "Text", _player, "Gold");
+            lblExperience.DataBindings.Add(
+                "Text", _player, "ExperiencePoints");
+            lblLevel.DataBindings.Add(
+                "Text", _player, "Level");
             MoveTo(_player.CurrentLocation);
-            UpdatePlayerStats();
+
         }
 
         private void btnNorth_Click(object sender, EventArgs e)
@@ -112,8 +120,6 @@ namespace SuperAdventure
                     }
                 }
 
-                UpdatePlayerStats();
-
                 UpdateInventoryListInUI();
                 UpdateWeaponListinUI();
                 UpdatePotionListInUI();
@@ -132,8 +138,6 @@ namespace SuperAdventure
 
                 _player.CurrentHitPoints -= damageToPlayer;
 
-                lblHitPoints.Text = _player.CurrentHitPoints.ToString();
-
                 if (_player.CurrentHitPoints <= 0)
                 {
                     rtbMessages.Text += "The " + _currentMonster.Name + " killed you." +
@@ -143,14 +147,6 @@ namespace SuperAdventure
                 }
                 ScrollToBottomOfMessages();
             }
-        }
-
-        private void UpdatePlayerStats()
-        {
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
-            lblGold.Text = _player.Gold.ToString();
-            lblExperience.Text = _player.ExperiencePoints.ToString();
-            lblLevel.Text = _player.Level.ToString();
         }
 
         private void btnUsePotion_Click(object sender, System.EventArgs e)
@@ -190,7 +186,6 @@ namespace SuperAdventure
                 MoveTo(World.LocationById((int)World.LocationTypes.Home));
             }
 
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
             UpdateInventoryListInUI();
             UpdatePotionListInUI();
             ScrollToBottomOfMessages();
@@ -220,8 +215,6 @@ namespace SuperAdventure
             rtbLocation.Text += theLocation.Description + Environment.NewLine;
 
             _player.CurrentHitPoints = _player.MaximumHitPoints;
-
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
 
             if (theLocation.QuestAvailableHere != null)
             {
