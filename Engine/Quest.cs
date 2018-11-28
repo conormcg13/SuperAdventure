@@ -6,14 +6,14 @@ namespace Engine
     {
         public Quest( int id, string name, string description, int rewardExperiencePoints, int rewardGold )
         {
-            ID = id;
+            Id = id;
             Name = name;
             Description = description;
             RewardExperiencePoints = rewardExperiencePoints;
             RewardGold = rewardGold;
             QuestCompletionItems = new List<QuestCompletionItem>();
         }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int RewardExperiencePoints { get; set; }

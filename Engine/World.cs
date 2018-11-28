@@ -188,7 +188,7 @@ namespace Engine
         {
             foreach (var item in Items)
             {
-                if (item.ID == id)
+                if (item.Id == id)
                 {
                     return item;
                 }
@@ -200,7 +200,7 @@ namespace Engine
         {
             foreach (var monster in Monsters)
             {
-                if (monster.ID == id)
+                if (monster.Id == id)
                 {
                     return monster;
                 }
@@ -212,7 +212,7 @@ namespace Engine
         {
             foreach (var quest in Quests)
             {
-                if (quest.ID == id)
+                if (quest.Id == id)
                 {
                     return quest;
                 }
@@ -224,7 +224,7 @@ namespace Engine
         {
             foreach (var location in Locations)
             {
-                if (location.ID == id)
+                if (location.Id == id)
                 {
                     return location;
                 }

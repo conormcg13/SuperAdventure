@@ -8,7 +8,7 @@ namespace Engine
                             int rewardGold, int currentHitPoints, int maximumHitPoints) :
                                 base( currentHitPoints, maximumHitPoints )
         {
-            ID = id;
+            Id = id;
             Name = name;
             MaximumDamage = maximumDamage;
             RewardExperiencePoints = rewardExperiencePoints;
@@ -18,14 +18,14 @@ namespace Engine
 
         public Monster(Monster monsterObject) : base(monsterObject.CurrentHitPoints, monsterObject.MaximumHitPoints)
         {
-            ID = monsterObject.ID;
+            Id = monsterObject.Id;
             Name = monsterObject.Name;
             MaximumDamage = monsterObject.MaximumDamage;
             RewardExperiencePoints = monsterObject.RewardExperiencePoints;
             RewardGold = monsterObject.RewardGold;
             LootTable = new List<LootItem>();
         }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int MaximumDamage { get; set; }
         public int RewardExperiencePoints { get; set; }

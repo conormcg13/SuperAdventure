@@ -6,14 +6,14 @@
                             Item itemRequiredToEnter = null, Quest questAvailableHere = null, 
                                 Monster monsterLivingHere = null )
         {
-            ID = id;
+            Id = id;
             Name = name;
             Description = description;
             ItemRequiredToEnter = itemRequiredToEnter;
             QuestAvailableHere = questAvailableHere;
             MonsterLivingHere = monsterLivingHere;
         }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Item ItemRequiredToEnter { get; set; }
